@@ -37,7 +37,9 @@ For a complete list, see the [PostgreSQL documentation](https://www.postgresql.o
 
 ```shell
 # For change or set ROOT password
-sudo su - postgres psql
+sudo su - postgres
+psql
 \password postgres
 \q
+exit
 ```
