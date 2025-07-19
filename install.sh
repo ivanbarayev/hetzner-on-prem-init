@@ -21,6 +21,7 @@ function PG {
   if ! which psql > /dev/null 2>&1; then
     sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
     sudo apt update
+    sudo apt upgrade
     sudo apt install postgresql -y
     systemctl enable postgresql
     systemctl start postgresql
