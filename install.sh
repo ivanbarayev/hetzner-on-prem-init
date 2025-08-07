@@ -50,7 +50,7 @@ function GOLANG {
 
     wget_result="$(wget -NS https://go.dev/dl/go$vers.linux-amd64.tar.gz 2>&1|grep "HTTP/"|awk '{print $2}')"
 
-    if [ $wget_result = 200 ]; then
+    if [ $wget_result = 200 || $wget_result = 302]; then
       sudo tar -C /usr/local -xzf go$vers.linux-amd64.tar.gz
       echo "export PATH=/usr/local/go/bin:${PATH}" | sudo tee -a $HOME/.profile
       source $HOME/.profile
