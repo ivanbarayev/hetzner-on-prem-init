@@ -48,9 +48,10 @@ function GOLANG {
   if ! command -v go > /dev/null 2>&1; then
     read -p "Please type which GOLANG version you want to install (1.24.3, 1.24.5 etc) : " vers
 
-    wget_result="$(wget -NS https://go.dev/dl/go$vers.linux-amd64.tar.gz 2>&1|grep "HTTP/"|awk '{print $2}')"
+    wget_result="$(wget --spider -S https://go.dev/dl/go$vers.linux-amd64.tar.gz 2>&1 | grep "HTTP/" | tail -1 | awk '{print $2}')"
 
-    if [ $wget_result = 200 || $wget_result = 302]; then
+    if [[ $wget_result = 200 || $wget_result = 302 ]]; then
+      wget https://go.dev/dl/go$vers.linux-amd64.tar.gz
       sudo tar -C /usr/local -xzf go$vers.linux-amd64.tar.gz
       echo "export PATH=/usr/local/go/bin:${PATH}" | sudo tee -a $HOME/.profile
       source $HOME/.profile
