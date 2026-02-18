@@ -19,13 +19,20 @@ function NGINX {
 
 function PG {
   if ! which psql > /dev/null 2>&1; then
+    read -p "Please type which PostgreSQL version you want to install (13, 14, 15, 16, 17 etc) or press ENTER for latest: " vers
+    wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
     sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
     sudo apt update
-    sudo apt upgrade
-    sudo apt install postgresql -y
-    systemctl enable postgresql
-    systemctl start postgresql
-    systemctl status postgresql
+    if [ -z "$vers" ]; then
+      echo "Installing latest PostgreSQL version..."
+      sudo apt install postgresql postgresql-contrib -y
+    else
+      echo "Installing PostgreSQL version $vers..."
+      sudo apt install postgresql-$vers postgresql-contrib-$vers -y
+    fi
+    sudo systemctl enable postgresql
+    sudo systemctl start postgresql
+    sudo systemctl status postgresql
   else
     echo "@@@@@@@@@@@@@@@ POSTGRES already installed. Skipping installation... @@@@@@@@@@@@@@@"
   fi
