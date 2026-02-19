@@ -71,11 +71,24 @@ function GOLANG {
   fi
 }
 
+function REDIS {
+  if ! which redis-server > /dev/null 2>&1; then
+    curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
+    echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list
+    sudo apt install -y redis
+    systemctl enable redis-server
+    systemctl start redis-server
+  else
+    echo "@@@@@@@@@@@@@@@ REDIS already installed. Skipping installation... @@@@@@@@@@@@@@@"
+  fi
+}
+
 selections=(
   "Nginx"
   "PostgresSQL"
   "NVM"
   "GO Lang"
+  "Redis"
   "Git"
 )
 
@@ -127,6 +140,9 @@ case $selected_choice in
     ;;
   "GO Lang")
     GOLANG
+    ;;
+  "Redis")
+    REDIS
     ;;
   "Quit")
     ;;
